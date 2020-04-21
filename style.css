@@ -19,6 +19,10 @@ canvas {
     border-radius: 5px;
 }
 
+h1 {
+    color: #fff;
+}
+
 .btn {
     cursor: pointer;
     border: 0;
