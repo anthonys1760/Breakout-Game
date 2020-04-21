@@ -41,12 +41,16 @@ const brickInfo = {
 
 //Create bricks
 const bricks = [];
-for(let i = 0; i < brickRowCount; i++) {
+for (let i = 0; i < brickRowCount; i++) {
     bricks[i] = [];
-    for(let j = 0; j < brickColumnCount; j++) {
+    for (let j = 0; j < brickColumnCount; j++) {
         const x = i * (brickInfo.w + brickInfo.padding) + brickInfo.offsetX;
         const y = j * (brickInfo.h + brickInfo.padding) + brickInfo.offsetY;
-        bricks[i][j] = { x, y, ...brickInfo }
+        bricks[i][j] = {
+            x,
+            y,
+            ...brickInfo
+        }
     }
 }
 
@@ -71,34 +75,81 @@ function drawPaddle() {
 
 //Draw score on canvas
 function drawScore() {
-ctx.font = '20px Arial';
-ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
+    ctx.font = '20px Arial';
+    ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
 }
 
 //Draw bricks on Canvas
 function drawBricks() {
     bricks.forEach(column => {
         column.forEach(brick => {
-        ctx.beginPath();
-        ctx.rect(brick.x, brick.y, brick.w, brick.h);
-        ctx.fillStyle = brick.visible ? '#0095dd' : 'transparent';
-        ctx.fill();
-        ctx.closePath();
+            ctx.beginPath();
+            ctx.rect(brick.x, brick.y, brick.w, brick.h);
+            ctx.fillStyle = brick.visible ? '#0095dd' : 'transparent';
+            ctx.fill();
+            ctx.closePath();
+        });
     });
-  });
+}
+
+//Move paddle on Canvas
+function movePaddle() {
+    paddle.x += paddle.dx;
+
+    //Wall detection
+    if (paddle.x + paddle.w > canvas.width) {
+        paddle.x = canvas.width - paddle.w;
+    }
+
+    if (paddle.x < 0) {
+        paddle.x = 0;
+    }
 }
 
 //Draw everything
 function draw() {
+    //clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     drawBall();
     drawPaddle();
     drawScore();
     drawBricks();
 }
 
+//Update canvas drawing and animation
+function update() {
+    movePaddle();
+
+    //Draw Everything
+    draw();
+    requestAnimationFrame(update);
+}
+
+update();
+
 draw();
+
+//Keydown event
+function keyDown(e) {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        paddle.dx = paddle.speed;
+    } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        paddle.dx = -paddle.speed;
+    }
+}
+
+//Keyup Event
+function keyUp(e) {
+    if (e.key === 'Right' || e.key === 'arrowRight' || e.key === 'left' || e.key === 'arrowLeft') {
+        paddle.dx = 0;
+    }
+}
+
+//Keyboard event handlers
+document.addEventListener('keydown', keyDown);
+document.addEventListener('keyup', keyUp);
 
 //Rules and close event handlers
 rulesBtn.addEventListener('click', () => rules.classList.add('show'));
 closeBtn.addEventListener('click', () => rules.classList.remove('show'));
-
