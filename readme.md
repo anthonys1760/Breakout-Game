@@ -17,7 +17,7 @@ Game where you control a paddle with the arrow keys to bounce a ball up to break
 ## Steps to execute this game:
 - Download the entire code 
 - Open up the index.html.
-- [View Live Site](https://anthonys1760.github.io/Simple-Calculator/)
+- [View Live Site](https://anthonys1760.github.io/Breakout-Game/)
 
 
 ## Technologies used: 
